@@ -47,6 +47,3 @@ class RandomClickModel(ClickModel):
         if not self.params_initialized:
             raise AssertionError('Parameters have not been initialized.')
         return [self.rho] * len(ranking)
-
-
-model = RandomClickModel()

@@ -1,16 +1,15 @@
 from random import getrandbits
 
-from click_models import *
 from origin import Origin
-from ranking_pair import *
 from ranking import *
+from winner import Winner
 
 
 class Interleaver:
     def __init__(self):
         self.click_model = None
 
-    def compare(self, pair):
+    def run_simulation(self, pair):
         ranking, origins = self.interleave(pair)
         clicks = self.click_model.simulate_clicks_on(ranking)
         production_clicks = 0
@@ -24,6 +23,13 @@ class Interleaver:
                     experiment_clicks += 1
 
         return production_clicks, experiment_clicks
+
+    def evaluate(self, pair):
+        production_clicks, experiment_clicks = self.run_simulation(pair)
+        if experiment_clicks == production_clicks:
+            return Winner.T
+        else:
+            return Winner.P if production_clicks > experiment_clicks else Winner.E
 
 
 class BalancedInterleaver(Interleaver):

@@ -2,6 +2,8 @@ from relevance import *
 from ranking_pair import *
 from ranking import *
 from interleavers import *
+from analysis import *
+from click_models import *
 
 
 def freestyle():
@@ -100,4 +102,29 @@ def test_probabilistic_interleaving():
     print origins
 
 
-test_probabilistic_interleaving()
+def test_analysis():
+    pairs1 = generate_all_winners(RankingPair.delta_average_precision)
+    inter1 = BalancedInterleaver()
+    model1 = RandomClickModel()
+    combo1 = compare(pairs1, inter1, model1)
+    print "Average Precision + Balanced Interleaver + Random Click Model: " + str(combo1)
+
+    pairs2 = generate_all_winners(RankingPair.delta_average_precision)
+    inter2 = ProbabilisticInterleaver()
+    model2 = RandomClickModel()
+    combo2 = compare(pairs2, inter2, model2)
+    print "Average Precision + Probabil Interleaver + Random Click Model: " + str(combo2)
+
+    pairs3 = generate_all_winners(RankingPair.delta_ndcg_at, 5)
+    inter3 = BalancedInterleaver()
+    model3 = RandomClickModel()
+    combo3 = compare(pairs3, inter3, model3)
+    print "Normalized DCG @5 + Balanced Interleaver + Random Click Model: " + str(combo3)
+
+    pairs4 = generate_all_winners(RankingPair.delta_ndcg_at, 5)
+    inter4 = BalancedInterleaver()
+    model4 = RandomClickModel()
+    combo4 = compare(pairs4, inter4, model4)
+    print "Normalized DCG    + Balanced Interleaver + Random Click Model: " + str(combo4)
+
+test_analysis()

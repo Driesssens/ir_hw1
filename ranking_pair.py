@@ -5,7 +5,7 @@ from types import MethodType
 
 def generate_rankings(length, grades):
     rankings = list(product(grades, repeat=length))
-    return [Ranking(ranking) for ranking in rankings]
+    return [Ranking(list(ranking)) for ranking in rankings]
 
 
 def generate_pairs(rankings):
