@@ -88,4 +88,16 @@ def test_winner_generator():
     print "ties check: " + str(amount_of_ties)
 
 
-test_winner_generator()
+def test_probabilistic_interleaving():
+    p = Ranking([Relevance.HR, Relevance.HR, Relevance.R, Relevance.R, Relevance.R])
+    e = Ranking([Relevance.N, Relevance.N, Relevance.N, Relevance.N, Relevance.N])
+
+    test_pair = RankingPair(p, e)
+
+    interleaver = ProbabilisticInterleaver()
+    ranking, origins = interleaver.interleave(test_pair)
+    print ranking
+    print origins
+
+
+test_probabilistic_interleaving()

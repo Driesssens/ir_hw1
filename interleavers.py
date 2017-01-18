@@ -43,9 +43,9 @@ class BalancedInterleaver(Interleaver):
         return ranking, origins
 
 
-class TeamDraftInterleaver:
+class TeamDraftInterleaver(Interleaver):
     def __init__(self):
-        self.click_model = None
+        Interleaver.__init__(self)
 
     def interleave(self, pair):
         length = min(len(pair.p.ranking), len(pair.e.ranking))
@@ -61,3 +61,43 @@ class TeamDraftInterleaver:
                 ranking.extend([pair.e.ranking[i], pair.p.ranking[i]])
 
         return ranking, origins
+
+
+class ProbabilisticInterleaver(Interleaver):
+    tau = 3
+
+    def __init__(self):
+        Interleaver.__init__(self)
+
+    def interleave(self, pair):
+        length = min(len(pair.p.ranking), len(pair.e.ranking))
+
+        origins, ranking = [], []
+
+        remaining_p = pair.p.ranking[:]
+        remaining_e = pair.e.ranking[:]
+
+        for i in range(length):
+            if getrandbits(1):
+                ranking.append(self.sample_element_from(remaining_p))
+                ranking.append(self.sample_element_from(remaining_e))
+                origins.extend([Origin.P, Origin.E])
+            else:
+                ranking.append(self.sample_element_from(remaining_e))
+                ranking.append(self.sample_element_from(remaining_p))
+                origins.extend([Origin.E, Origin.P])
+
+        return ranking, origins
+
+    def sample_element_from(self, remaining_list):
+        remaining_amount = len(remaining_list)
+        probabilities = self.softmax_probabilities(remaining_amount)
+        sampled_index = np.random.choice(range(remaining_amount), p=probabilities)
+        popped = remaining_list.pop(sampled_index)
+        return popped
+
+    def softmax_probabilities(self, length):
+        unnormalized = [1 / float(np.power(rank, self.tau)) for rank in range(1, length + 1)]
+        normalization_factor = float(sum(unnormalized))
+        normalized = [x / normalization_factor for x in unnormalized]
+        return normalized
