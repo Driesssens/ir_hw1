@@ -75,3 +75,6 @@ class Ranking:
 
     def __hash__(self):
         return hash(tuple(sorted(self.ranking)))
+
+    def __str__(self):
+        return "Ranking" + str(self.ranking)

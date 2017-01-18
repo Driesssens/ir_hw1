@@ -6,6 +6,8 @@ class Relevance:
         "HR"  # highly relevant
     ]
 
+    all = [N, R, HR]
+
 
 def quantify(grade):
     """Assigns a numerical value to a relevance grade."""

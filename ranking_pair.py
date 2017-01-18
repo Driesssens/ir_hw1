@@ -1,3 +1,21 @@
+from itertools import product
+from ranking import *
+
+
+def generate_rankings(length, grades):
+    rankings = list(product(grades, repeat=length))
+    return [Ranking(ranking) for ranking in rankings]
+
+
+def generate_pairs(rankings):
+    pairs = list(product(rankings, repeat=2))
+    return [RankingPair(p, e) for p, e in pairs]
+
+
+def generate_all_pairs():
+    return generate_pairs(generate_rankings(5, Relevance.all))
+
+
 class RankingPair:
     """RankingPair objects embody a pair of Ranking objects, representing
     the results of the P and E algorithms to a query.
@@ -26,3 +44,6 @@ class RankingPair:
 
     def delta_rbp(self):
         return self.e.rank_biased_precision() - self.p.rank_biased_precision()
+
+    def __str__(self):
+        return "RankingPair[P=" + str(self.p.ranking) + ", E=" + str(self.e.ranking) + "]"

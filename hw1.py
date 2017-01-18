@@ -64,4 +64,12 @@ def test_deltas():
     print "recall at 3:             " + str(pair.delta_recall_at(3))
     print "recall at 5:             " + str(pair.delta_recall_at(5))
 
-test_deltas()
+
+def test_generator():
+    all_pairs = generate_all_pairs()
+    print all_pairs[0]
+    print all_pairs[-1]
+    print all_pairs[9235]
+    print len(all_pairs)
+
+test_generator()
