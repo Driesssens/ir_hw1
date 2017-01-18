@@ -72,4 +72,20 @@ def test_generator():
     print all_pairs[9235]
     print len(all_pairs)
 
-test_generator()
+
+def test_winner_generator():
+    all = generate_all_pairs()
+    winners = generate_all_winners(RankingPair.delta_recall_at, 5)
+    amount_of_winners = sum(winner.delta_recall_at(1) > 0 for winner in winners)
+    amount_of_losers = sum(winner.delta_recall_at(1) < 0 for winner in winners)
+    amount_of_ties = len(all) - amount_of_losers - amount_of_winners
+
+    print "#all: " + str(len(all))
+    print "#winners: " + str(len(winners))
+    print "winners %: " + str(len(winners) / float(len(all)) * 100)
+    print "winners check: " + str(amount_of_winners)
+    print "losers check: " + str(amount_of_losers)
+    print "ties check: " + str(amount_of_ties)
+
+
+test_winner_generator()

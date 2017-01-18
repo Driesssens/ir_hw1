@@ -1,5 +1,6 @@
 from itertools import product
 from ranking import *
+from types import MethodType
 
 
 def generate_rankings(length, grades):
@@ -14,6 +15,15 @@ def generate_pairs(rankings):
 
 def generate_all_pairs():
     return generate_pairs(generate_rankings(5, Relevance.all))
+
+
+def generate_all_winners(delta_method, parameter=None):
+    all_pairs = generate_all_pairs()
+    if parameter is None:
+        winners = [pair for pair in all_pairs if MethodType(delta_method, pair)() > 0]
+    else:
+        winners = [pair for pair in all_pairs if MethodType(delta_method, pair)(parameter) > 0]
+    return winners
 
 
 class RankingPair:
