@@ -46,12 +46,22 @@ def full_test():
     print "expi clicks: " + str(experiment_clicks)
 
 
-def small_test():
-    ranking1 = Ranking([Relevance.R, Relevance.R, Relevance.R, Relevance.R, Relevance.HR])
-    ranking2 = Ranking([Relevance.R, Relevance.R, Relevance.R, Relevance.R, Relevance.HR])
-    set1 = {ranking1, ranking2}
-    set2 = {ranking2, ranking2}
+def test_deltas():
+    ranking1 = Ranking([Relevance.HR, Relevance.N, Relevance.N, Relevance.N, Relevance.N])
+    ranking2 = Ranking([Relevance.N, Relevance.N, Relevance.N, Relevance.N, Relevance.HR])
+    pair = RankingPair(ranking1, ranking2)
+    print "average precision:       " + str(pair.delta_average_precision())
+    print "cdg at 1:                " + str(pair.delta_dcg_at(1))
+    print "cdg at 3:                " + str(pair.delta_dcg_at(3))
+    print "cdg at 5:                " + str(pair.delta_dcg_at(5))
+    print "ncdg at 1:               " + str(pair.delta_ndcg_at(1))
+    print "ncdg at 3:               " + str(pair.delta_ndcg_at(3))
+    print "ncdg at 5:               " + str(pair.delta_ndcg_at(5))
+    print "precision at 1:          " + str(pair.delta_precision_at(1))
+    print "precision at 3:          " + str(pair.delta_precision_at(3))
+    print "precision at 5:          " + str(pair.delta_precision_at(5))
+    print "recall at 1:             " + str(pair.delta_recall_at(1))
+    print "recall at 3:             " + str(pair.delta_recall_at(3))
+    print "recall at 5:             " + str(pair.delta_recall_at(5))
 
-    print set1 == set2
-
-small_test()
+test_deltas()
