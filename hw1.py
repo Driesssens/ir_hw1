@@ -88,44 +88,6 @@ def test_probabilistic_interleaving():
     print origins
 
 
-def test_analysis(random=True):
-    pairs1 = generate_all_winners(RankingPair.delta_average_precision)
-    inter1 = BalancedInterleaver()
-    model1 = RandomClickModel() if random else SimplifiedDependentClickModel()
-    combo1 = compare(pairs1, inter1, model1)
-    print "Average Precision + Balanced Interleaver + Random Click Model: " + str(combo1)
-
-    pairs2 = generate_all_winners(RankingPair.delta_average_precision)
-    inter2 = ProbabilisticInterleaver()
-    model2 = RandomClickModel() if random else SimplifiedDependentClickModel()
-    combo2 = compare(pairs2, inter2, model2)
-    print "Average Precision + Probabil Interleaver + Random Click Model: " + str(combo2)
-
-    pairs3 = generate_all_winners(RankingPair.delta_ndcg_at, 5)
-    inter3 = BalancedInterleaver()
-    model3 = RandomClickModel() if random else SimplifiedDependentClickModel()
-    combo3 = compare(pairs3, inter3, model3)
-    print "Normalized DCG @5 + Balanced Interleaver + Random Click Model: " + str(combo3)
-
-    pairs4 = generate_all_winners(RankingPair.delta_ndcg_at, 5)
-    inter4 = BalancedInterleaver()
-    model4 = RandomClickModel() if random else SimplifiedDependentClickModel()
-    combo4 = compare(pairs4, inter4, model4)
-    print "Normalized DCG @5 + Balanced Interleaver + Random Click Model: " + str(combo4)
-
-    pairs5 = generate_all_winners(RankingPair.delta_dcg_at, 5)
-    inter5 = BalancedInterleaver()
-    model5 = RandomClickModel() if random else SimplifiedDependentClickModel()
-    combo5 = compare(pairs5, inter5, model5)
-    print "Discounted CG @ 5 + Balanced Interleaver + Random Click Model: " + str(combo5)
-
-    pairs6 = generate_all_winners(RankingPair.delta_dcg_at, 5)
-    inter6 = BalancedInterleaver()
-    model6 = RandomClickModel() if random else SimplifiedDependentClickModel()
-    combo6 = compare(pairs6, inter6, model6)
-    print "Discounted CG @ 5 + Balanced Interleaver + Random Click Model: " + str(combo6)
-
-
 def test_sdcm():
     model = SimplifiedDependentClickModel()
     print model.attractiveness_of
@@ -151,4 +113,4 @@ def test_yandex_parser():
         print query
 
 
-test_analysis(random=False)
+analyse()
