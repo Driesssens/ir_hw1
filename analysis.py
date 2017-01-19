@@ -15,4 +15,4 @@ def compare(pairs, interleaver, click_model):
         else:
             ties += 1
 
-    return (experiment_wins + 0.5 * ties) / float(len(pairs))
+    return ((experiment_wins + 0.5 * ties) / float(len(pairs)) - 0.5) * 100

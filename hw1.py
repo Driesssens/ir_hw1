@@ -6,20 +6,6 @@ from analysis import *
 from click_models import *
 
 
-def freestyle():
-    perfect = Ranking([Relevance.HR] * 5)
-    medium = Ranking([Relevance.R] * 5)
-    worst = Ranking([Relevance.N] * 5)
-
-    production = Ranking([Relevance.HR, Relevance.HR, Relevance.R, Relevance.R, Relevance.N])
-    experiment = Ranking([Relevance.N, Relevance.N, Relevance.R, Relevance.R, Relevance.HR])
-
-    test_pair = RankingPair(production, experiment)
-    interleaving = interleave_team_draft(test_pair)
-    print interleaving.ranking
-    print interleaving.origins
-
-
 def full_test():
     interleaver = BalancedInterleaver()
     interleaver.click_model = RandomClickModel()
@@ -102,29 +88,67 @@ def test_probabilistic_interleaving():
     print origins
 
 
-def test_analysis():
+def test_analysis(random=True):
     pairs1 = generate_all_winners(RankingPair.delta_average_precision)
     inter1 = BalancedInterleaver()
-    model1 = RandomClickModel()
+    model1 = RandomClickModel() if random else SimplifiedDependentClickModel()
     combo1 = compare(pairs1, inter1, model1)
     print "Average Precision + Balanced Interleaver + Random Click Model: " + str(combo1)
 
     pairs2 = generate_all_winners(RankingPair.delta_average_precision)
     inter2 = ProbabilisticInterleaver()
-    model2 = RandomClickModel()
+    model2 = RandomClickModel() if random else SimplifiedDependentClickModel()
     combo2 = compare(pairs2, inter2, model2)
     print "Average Precision + Probabil Interleaver + Random Click Model: " + str(combo2)
 
     pairs3 = generate_all_winners(RankingPair.delta_ndcg_at, 5)
     inter3 = BalancedInterleaver()
-    model3 = RandomClickModel()
+    model3 = RandomClickModel() if random else SimplifiedDependentClickModel()
     combo3 = compare(pairs3, inter3, model3)
     print "Normalized DCG @5 + Balanced Interleaver + Random Click Model: " + str(combo3)
 
     pairs4 = generate_all_winners(RankingPair.delta_ndcg_at, 5)
     inter4 = BalancedInterleaver()
-    model4 = RandomClickModel()
+    model4 = RandomClickModel() if random else SimplifiedDependentClickModel()
     combo4 = compare(pairs4, inter4, model4)
-    print "Normalized DCG    + Balanced Interleaver + Random Click Model: " + str(combo4)
+    print "Normalized DCG @5 + Balanced Interleaver + Random Click Model: " + str(combo4)
 
-test_analysis()
+    pairs5 = generate_all_winners(RankingPair.delta_dcg_at, 5)
+    inter5 = BalancedInterleaver()
+    model5 = RandomClickModel() if random else SimplifiedDependentClickModel()
+    combo5 = compare(pairs5, inter5, model5)
+    print "Discounted CG @ 5 + Balanced Interleaver + Random Click Model: " + str(combo5)
+
+    pairs6 = generate_all_winners(RankingPair.delta_dcg_at, 5)
+    inter6 = BalancedInterleaver()
+    model6 = RandomClickModel() if random else SimplifiedDependentClickModel()
+    combo6 = compare(pairs6, inter6, model6)
+    print "Discounted CG @ 5 + Balanced Interleaver + Random Click Model: " + str(combo6)
+
+
+def test_sdcm():
+    model = SimplifiedDependentClickModel()
+    print model.attractiveness_of
+    model.learn()
+    print model.satisfaction_at
+    model2 = SimplifiedDependentClickModel()
+    model2.load()
+    print model2.satisfaction_at
+
+
+def test_rcm():
+    model = RandomClickModel()
+    model.learn()
+    print model.rho
+    model2 = RandomClickModel()
+    model2.load()
+    print model2.rho
+
+
+def test_yandex_parser():
+    queries = parse_yandex_file('YandexRelPredChallenge.txt')
+    for query in queries:
+        print query
+
+
+test_analysis(random=False)

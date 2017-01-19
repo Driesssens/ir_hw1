@@ -4,20 +4,28 @@ from types import MethodType
 
 
 def generate_rankings(length, grades):
-    rankings = list(product(grades, repeat=length))
-    return [Ranking(list(ranking)) for ranking in rankings]
+    """"Generates all combinatorial possibilities of ranking lists existing of
+    the relevance grade labels in `grades`, being of length `length."""
+    rankings = list(product(grades, repeat=length))  # all combinatorial possibilities
+    return [Ranking(list(ranking)) for ranking in rankings]  # turn into Ranking objects
 
 
 def generate_pairs(rankings):
+    """Given a set of `rankings`, generates all possible pairs. """
     pairs = list(product(rankings, repeat=2))
     return [RankingPair(p, e) for p, e in pairs]
 
 
 def generate_all_pairs():
+    """"Generates all possible pairs of rankings of length 5 containing
+    relevance labels N, R and HR. """
     return generate_pairs(generate_rankings(5, Relevance.all))
 
 
 def generate_all_winners(delta_method, parameter=None):
+    """"Generates all pairs, but throws away those pairs for which the experimental algorithm
+    is not the winner according to offline evaluation metric `delta_method` (possibly parameterized
+    with `parameter`, for instance in the case of 'recall at 5'. """
     all_pairs = generate_all_pairs()
     if parameter is None:
         winners = [pair for pair in all_pairs if MethodType(delta_method, pair)() > 0]
